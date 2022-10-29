@@ -1,6 +1,6 @@
 import React from 'react';
 import "./tasks.css";
-// import Collapsible from "../Collapsible/Collapsible";
+import Collapsible from "../collapsible/Collapsible";
 import { useState } from "react";
 
 function Tasks() {
