@@ -1,4 +1,4 @@
-export const initialTask = [
+export const initialTasks  = [
     {
         id: 1,
         taskTitle: "read redux today",

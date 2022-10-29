@@ -1,11 +1,15 @@
 import React from 'react'
 import Tasks from './components/tasks/Tasks';
+import store from './store';
+import { Provider } from'react-redux';
 
 function App() {
   return (
-    <>
-    <Tasks />
-    </>
+    <Provider store={store}>
+      <Tasks />
+    </Provider>
+    
+    
   )
 }
 
