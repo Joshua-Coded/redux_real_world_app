@@ -1,5 +1,5 @@
 import { initialTasks } from "../data/tasks";
-import * as actionTypes from "../constants/action-types";
+import * as actionTypes from "../constants/ActionTypes";
 
 //reducer is a function that receives an action and returns new state.
 export const tasksReducer = (state = initialTasks, action) => {
