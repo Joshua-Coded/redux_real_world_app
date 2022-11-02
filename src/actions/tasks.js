@@ -8,7 +8,7 @@ export const createTask = () => {
     }
 };
 
-export const deleteTask = () => {
+export const deleteTask = (taskId) => {
     return {
         type: actionTypes.DELETE_TASK,
         payload: taskId
