@@ -1,4 +1,5 @@
-import * as actionTypes  from "../constants/ActionTypes";
+import * as actionTypes  from "../constants/action-types";
+
 
 // actions creator is a function that returns an action object
 export const createTask = () => {

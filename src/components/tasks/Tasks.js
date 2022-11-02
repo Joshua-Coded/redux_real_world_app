@@ -3,8 +3,16 @@ import "./tasks.css";
 import Collapsible from "../collapsible/Collapsible";
 import { useState } from "react";
 // import actions from '../../actions';
+import {useSelector} from "react-redux"
+import { tasksReducer } from '../../reducers/task-reducers';
 
 function Tasks() {
+
+
+  // get the state of your combineReducers
+
+  let tasks = useSelector(state => state.tasks);
+
   let [ isNewTaskOpen, setIsNewTaskOpen ] = useState(false);
 
   let onSaveClick = () => {
@@ -77,14 +85,14 @@ function Tasks() {
         <div className="content-body">
 
           {/* task starts */}
-          <div className="task">
-            <div className="task-body">
+{tasks.map(task => <div className="task" key ={task.id}>
+            <div className="task-body" >
               <div className="task-title">
                 <i className="fa fa-thumbtack"></i>
-                <span className="task-title-text">Bob's Appointment</span>
+                <span className="task-title-text">{task.taskTitle}</span>
               </div>
               <div className="task-subtitle">
-                <i className="far fa-clock"></i> <span className="task-subtitle-text">Jul 16th at 9:30am</span>
+                <i className="far fa-clock"></i> <span className="task-subtitle-text">{task.taskDateTime}</span>
               </div>
             </div>
 
@@ -92,25 +100,8 @@ function Tasks() {
               <button className="icon-button" title="Delete">&times;</button>
             </div>
           </div>
-          {/* task ends */}
-
-          {/* task starts */}
-          <div className="task">
-            <div className="task-body">
-              <div className="task-title">
-                <i className="fa fa-thumbtack"></i>
-                <span className="task-title-text">Project Presentation</span>
-              </div>
-              <div className="task-subtitle">
-                <i className="far fa-clock"></i> <span className="task-subtitle-text">Jul 17th at 11:15am</span>
-              </div>
-            </div>
-
-            <div className="task-options">
-              <button className="icon-button" title="Delete">&times;</button>
-            </div>
-          </div>
-          {/* task ends */}
+)}
+      {/* task ends */}
         </div>
       </div>
     </div>
