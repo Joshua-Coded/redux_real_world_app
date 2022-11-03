@@ -2,24 +2,41 @@ import React from 'react';
 import "./tasks.css";
 import Collapsible from "../collapsible/Collapsible";
 import { useState } from "react";
-// import actions from '../../actions';
-import {useSelector} from "react-redux"
+import actions from '../../actions';
+import {useSelector, useDispatch} from "react-redux"
 import { tasksReducer } from '../../reducers/task-reducers';
+import {toDisplayableDateFormat} from "../../utils/index";
+
 
 function Tasks() {
-
 
   // get the state of your combineReducers
 
   let tasks = useSelector(state => state.tasks);
 
+  //state
+  let [taskTitle, setTaskTitle] = useState("");
+  let [taskDateTime, setTaskDateTime] = useState("");
   let [ isNewTaskOpen, setIsNewTaskOpen ] = useState(false);
 
-  let onSaveClick = () => {
-    setIsNewTaskOpen(!isNewTaskOpen);
-  };
+    // create dispatch function
+    let dispatch =  useDispatch();
 
-  let onCancelClick = () => {
+  let onSaveClick = () => {
+    // dispatch an action called create Tasks.    
+  dispatch(actions.createTask({
+  id: Math.floor(Math.random() * 10000000),
+  taskTitle: taskTitle,
+  taskDateTime: taskDateTime,
+  isNewTaskOpen: isNewTaskOpen
+}));
+//clear the screen
+setTaskTitle("");
+setTaskDateTime("");
+setIsNewTaskOpen(false);
+}
+
+let onCancelClick = () => {
     setIsNewTaskOpen(!isNewTaskOpen);
   };
 
@@ -46,9 +63,12 @@ function Tasks() {
 
             {/* form group starts */}
             <div className="form-group">
-              <label className="form-label" htmlFor="task-title">Task Title:</label>
+              <label className="form-label" 
+              htmlFor="task-title">Task Title:</label>
               <div className="form-input">
-                <input type="text" placeholder="Task Title" className="text-box" id="task-title" />
+                <input type="text" placeholder="Task Title"
+                 className="text-box" id="task-title" value={taskTitle} onChange={(event) =>
+                {setTaskTitle(event.target.value)}} />
               </div>
               
             </div>
@@ -58,7 +78,11 @@ function Tasks() {
             <div className="form-group">
               <label className="form-label" htmlFor="task-date-time">Task Date and Time:</label>
               <div className="form-input">
-                <input type="datetime-local" placeholder="Task Date and Time" className="text-box" id="task-date-time" />
+                <input type="datetime-local"
+                 placeholder="Task Date and Time"
+                  className="text-box" 
+                  id="task-date-time" value={taskDateTime} onChange={(event) =>
+                    {setTaskDateTime(event.target.value)}} />
               </div>
             </div>
             {/* form group ends */}
@@ -85,6 +109,7 @@ function Tasks() {
         <div className="content-body">
 
           {/* task starts */}
+
 {tasks.map(task => <div className="task" key ={task.id}>
             <div className="task-body" >
               <div className="task-title">
@@ -92,7 +117,10 @@ function Tasks() {
                 <span className="task-title-text">{task.taskTitle}</span>
               </div>
               <div className="task-subtitle">
-                <i className="far fa-clock"></i> <span className="task-subtitle-text">{task.taskDateTime}</span>
+                <i className="far fa-clock"></i>
+                 <span className="task-subtitle-text">
+                  {toDisplayableDateFormat(task.taskDateTime)}
+                  </span>
               </div>
             </div>
 
