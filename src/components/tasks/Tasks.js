@@ -9,16 +9,17 @@ import {toDisplayableDateFormat} from "../../utils/index";
 
 
 function Tasks() {
-
-  // get the state of your combineReducers
-
-  let tasks = useSelector(state => state.tasks);
-
-  //state
+  
+  //states
   let [taskTitle, setTaskTitle] = useState("");
   let [taskDateTime, setTaskDateTime] = useState("");
   let [ isNewTaskOpen, setIsNewTaskOpen ] = useState(false);
+  let [search, setSearch] = useState("");
 
+  // get the state from redux store
+  let tasks = useSelector(state => state.tasks);
+  let filteredTasks = tasks.filter(task => 
+    task.taskTitle.toLowerCase().indexOf(search.toLowerCase()) >= 0);
     // create dispatch function
     let dispatch =  useDispatch();
 
@@ -109,7 +110,8 @@ if(window.confirm("Are you sure you want to delete this task")){
         </Collapsible>
 
         <div className="search-box">
-          <input type="search" placeholder="Search" />
+          <input type="search" placeholder="Search" 
+          value={search} onChange= {(event) => {setSearch(event.target.value)}}/>
           <i className="fa fa-search"></i>
         </div>
 
@@ -117,7 +119,7 @@ if(window.confirm("Are you sure you want to delete this task")){
 
           {/* task starts */}
 
-{tasks.map(task => <div className="task" key ={task.id}>
+{filteredTasks.map(task => <div className="task" key ={task.id}>
             <div className="task-body" >
               <div className="task-title">
                 <i className="fa fa-thumbtack"></i>
