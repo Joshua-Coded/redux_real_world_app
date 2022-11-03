@@ -40,6 +40,13 @@ let onCancelClick = () => {
     setIsNewTaskOpen(!isNewTaskOpen);
   };
 
+  let onDeleteClick = (task) => {
+if(window.confirm("Are you sure you want to delete this task")){
+  dispatch(actions.deleteTask(task.id));
+}
+  }
+
+
   return (
     <div className="outer-container">
       <div className="container">
@@ -125,7 +132,10 @@ let onCancelClick = () => {
             </div>
 
             <div className="task-options">
-              <button className="icon-button" title="Delete">&times;</button>
+              <button className="icon-button"
+               title="Delete" onClick={() => {
+                onDeleteClick(task)
+               }}>&times;</button>
             </div>
           </div>
 )}
