@@ -1,52 +1,57 @@
 import React from 'react';
 import "./tasks.css";
 import Collapsible from "../collapsible/Collapsible";
-import { useState } from "react";
-import actions from '../../actions';
-import {useSelector, useDispatch} from "react-redux"
-import { tasksReducer } from '../../reducers/task-reducers';
-import {toDisplayableDateFormat} from "../../utils/index";
-
+import { useState, useEffect } from "react";
+import actions from "../../actions";
+import { useSelector, useDispatch } from "react-redux";
+import { toDisplayableDateFormat } from "../../utils/";
 
 function Tasks() {
-  
-  //states
-  let [taskTitle, setTaskTitle] = useState("");
-  let [taskDateTime, setTaskDateTime] = useState("");
+  //state
+  let [ taskTitle, setTaskTitle ] = useState("");
+  let [ taskDateTime, setTaskDateTime ] = useState("");
   let [ isNewTaskOpen, setIsNewTaskOpen ] = useState(false);
-  let [search, setSearch] = useState("");
+  let [ search, setSearch ] = useState("");
 
-  // get the state from redux store
+  //create dispatch function
+  let dispatch = useDispatch();
+
+  //run on first render
+  useEffect(() => {
+    dispatch(actions.fetchTasks());
+  }, [dispatch]);
+
+  //get state from redux store
   let tasks = useSelector(state => state.tasks);
-  let filteredTasks = tasks.filter(task => 
+  let filteredTasks = tasks.map(task => 
     task.taskTitle.toLowerCase().indexOf(search.toLowerCase()) >= 0);
-    // create dispatch function
-    let dispatch =  useDispatch();
+
+  
 
   let onSaveClick = () => {
-    // dispatch an action called create Tasks.    
-  dispatch(actions.createTask({
-  id: Math.floor(Math.random() * 10000000),
-  taskTitle: taskTitle,
-  taskDateTime: taskDateTime,
-  isNewTaskOpen: isNewTaskOpen
-}));
-//clear the screen
-setTaskTitle("");
-setTaskDateTime("");
-setIsNewTaskOpen(false);
-}
+    //dispatch
+    dispatch(actions.createTask({
+      id: Math.floor(Math.random() * 10000000),
+      taskTitle: taskTitle,
+      taskDateTime: taskDateTime
+    }));
 
-let onCancelClick = () => {
+    //clear
+    setTaskTitle("");
+    setTaskDateTime("");
     setIsNewTaskOpen(!isNewTaskOpen);
   };
 
-  let onDeleteClick = (task) => {
-if(window.confirm("Are you sure you want to delete this task")){
-  dispatch(actions.deleteTask(task.id));
-}
-  }
+  let onCancelClick = () => {
+    setIsNewTaskOpen(!isNewTaskOpen);
+  };
 
+  let onDeleteClick = (task)  => {
+    if (window.confirm("Are you sure to delete this task"))
+    {
+      dispatch(actions.deleteTask(task.id));
+    }
+  };
 
   return (
     <div className="outer-container">
@@ -71,12 +76,9 @@ if(window.confirm("Are you sure you want to delete this task")){
 
             {/* form group starts */}
             <div className="form-group">
-              <label className="form-label" 
-              htmlFor="task-title">Task Title:</label>
+              <label className="form-label" htmlFor="task-title">Task Title:</label>
               <div className="form-input">
-                <input type="text" placeholder="Task Title"
-                 className="text-box" id="task-title" value={taskTitle} onChange={(event) =>
-                {setTaskTitle(event.target.value)}} />
+                <input type="text" placeholder="Task Title" className="text-box" id="task-title" value={taskTitle} onChange={(event) => { setTaskTitle(event.target.value)}} />
               </div>
               
             </div>
@@ -86,11 +88,7 @@ if(window.confirm("Are you sure you want to delete this task")){
             <div className="form-group">
               <label className="form-label" htmlFor="task-date-time">Task Date and Time:</label>
               <div className="form-input">
-                <input type="datetime-local"
-                 placeholder="Task Date and Time"
-                  className="text-box" 
-                  id="task-date-time" value={taskDateTime} onChange={(event) =>
-                    {setTaskDateTime(event.target.value)}} />
+                <input type="datetime-local" placeholder="Task Date and Time" className="text-box" id="task-date-time" value={taskDateTime} onChange={(event) => { setTaskDateTime(event.target.value)}} />
               </div>
             </div>
             {/* form group ends */}
@@ -110,38 +108,30 @@ if(window.confirm("Are you sure you want to delete this task")){
         </Collapsible>
 
         <div className="search-box">
-          <input type="search" placeholder="Search" 
-          value={search} onChange= {(event) => {setSearch(event.target.value)}}/>
+          <input type="search" placeholder="Search" value={search} onChange={(event) => { setSearch(event.target.value); }} />
           <i className="fa fa-search"></i>
         </div>
 
         <div className="content-body">
 
           {/* task starts */}
-
-{filteredTasks.map(task => <div className="task" key ={task.id}>
-            <div className="task-body" >
+          {filteredTasks.map(task => <div className="task" key={task.id}>
+            <div className="task-body">
               <div className="task-title">
                 <i className="fa fa-thumbtack"></i>
                 <span className="task-title-text">{task.taskTitle}</span>
               </div>
               <div className="task-subtitle">
-                <i className="far fa-clock"></i>
-                 <span className="task-subtitle-text">
-                  {toDisplayableDateFormat(task.taskDateTime)}
-                  </span>
+                <i className="far fa-clock"></i> <span className="task-subtitle-text">{toDisplayableDateFormat(task.taskDateTime)}</span>
               </div>
             </div>
 
             <div className="task-options">
-              <button className="icon-button"
-               title="Delete" onClick={() => {
-                onDeleteClick(task)
-               }}>&times;</button>
+              <button className="icon-button" title="Delete" onClick={() => { onDeleteClick(task); }}>&times;</button>
             </div>
-          </div>
-)}
-      {/* task ends */}
+          </div>)}
+          {/* task ends */}
+
         </div>
       </div>
     </div>
