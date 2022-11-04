@@ -23,7 +23,7 @@ function Tasks() {
 
   //get state from redux store
   let tasks = useSelector(state => state.tasks);
-  let filteredTasks = tasks.map(task => 
+  let filteredTasks = Object.values(tasks).filter(task => 
     task.taskTitle.toLowerCase().indexOf(search.toLowerCase()) >= 0);
 
   

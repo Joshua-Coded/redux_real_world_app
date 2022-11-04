@@ -1,6 +1,6 @@
 {
-    "tasks":
-    [
+  "tasks":
+ [   
         {
         "id": 1,
             "taskTitle": "Create Project Diagram",
@@ -12,5 +12,5 @@
             "taskTitle": "Dispatch  Cheques",
             "taskDateTime": "2022-09-12 11:23"
     }
-    ]
+]
 }
